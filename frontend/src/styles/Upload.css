@@ -1,0 +1,79 @@
+.upload-box {
+  position: relative;
+  border: 2px dashed #cecece;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.upload-box.hover-effect {
+  border-color: #1890ff;
+}
+
+.upload-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.upload-content {
+  font-size: 1.2rem;
+  color: #cecece;
+  text-align: center;
+}
+
+.upload-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-bottom: -2px;
+  margin-right: 6px;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.upload-content.error {
+  color: red;
+  animation: shake 0.4s ease;
+  font-size: 1.5rem;
+}
+
+.upload-pixelcard {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}

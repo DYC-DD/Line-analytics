@@ -1,0 +1,45 @@
+.home-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  color: #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.title-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.upload-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  transform: translateX(-10px);
+}
+
+.upload-box {
+  min-height: 160px;
+  width: 100%;
+}
+
+.loader-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.loader-text {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #555;
+}
