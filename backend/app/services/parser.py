@@ -7,7 +7,7 @@ from app.models.chat import ChatMessage
 def parse_line_chat(text: str) -> List[ChatMessage]:
     result = []
     current_date = None
-    date_pattern = re.compile(r"^(\d{4}/\d{2}/\d{2})")
+    date_pattern = re.compile(r"^(\d{4}/\d{1,2}/\d{1,2})（[一二三四五六日]）$")
     message_pattern = re.compile(r"^(\d{2}:\d{2})\t(.+?)\t(.+)$")
 
     for line in text.splitlines():

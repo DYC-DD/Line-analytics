@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Upload from "../components/Upload";
 import Loader from "../components/Loader";
 import phoneIcon from "../assets/mobile-phone.png";
+import ChartPanel from "./ChartPanel";
 import "../styles/Home.css";
 
 export default function Home() {
@@ -31,9 +32,12 @@ export default function Home() {
       )}
 
       {analysis && !loading && (
-        <pre style={{ marginTop: "2rem", textAlign: "left" }}>
-          <code>{JSON.stringify(analysis, null, 2)}</code>
-        </pre>
+        <>
+          <ChartPanel analysis={analysis} />
+          <pre style={{ marginTop: "2rem", textAlign: "left" }}>
+            {/* <code>{JSON.stringify(analysis, null, 2)}</code> */}
+          </pre>
+        </>
       )}
     </div>
   );
