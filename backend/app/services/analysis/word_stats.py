@@ -29,5 +29,6 @@ def most_common_words(
         ) or content.startswith("https://"):
             continue
         words = re.findall(r"\w+", content)
-        counter.update(words)
+        unique_words = set(words)
+        counter.update(unique_words)
     return counter.most_common(top_n)
