@@ -15,13 +15,13 @@ export default function MessageTypeStacked({ data }) {
   };
 
   const typeColors = {
-    text: "#42a5f5",
-    image: "#ab47bc",
-    sticker: "#26c6da",
-    video: "#ffa726",
-    file: "#8d6e63",
-    call: "#66bb6a",
-    other: "#999",
+    text: "#64b5f6",
+    image: "#ba68c8",
+    sticker: "#4dd0e1",
+    video: "#ffb74d",
+    file: "#a1887f",
+    call: "#81c784",
+    other: "#b0bec5",
   };
 
   const convertToPieData = (userTypeCount) => {
