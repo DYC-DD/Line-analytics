@@ -65,13 +65,13 @@ export default function MessageCountBar({ data }) {
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.name === "總計" ? "#f4b400" : "#00bcd4"}
+                fill={entry.name === "總計" ? "#ffba49" : "#45caff"}
               />
             ))}
             <LabelList
               dataKey="value"
               position="top"
-              style={{ fill: "#eee", fontWeight: 600, fontSize: 14 }}
+              style={{ fill: "#eee", fontWeight: 600, fontSize: 16 }}
             />
           </Bar>
         </BarChart>
