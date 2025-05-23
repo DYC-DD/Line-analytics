@@ -37,7 +37,7 @@ export default function MessageTypeStacked({ data }) {
     entries.forEach(([type, value]) => {
       const pct = value / total;
       const label = labelMap[type] || type;
-      if (pct < 0.01) {
+      if (pct < 0.02) {
         othersTotal += value;
         othersDetails.push({ type, label, value, percentage: pct });
       } else {

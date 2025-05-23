@@ -13,6 +13,8 @@
     "@nivo/calendar": "^0.98.0",
     "@nivo/core": "^0.98.0",
     "@nivo/pie": "^0.98.0",
+    "downloadjs": "^1.4.7",
+    "html-to-image": "^1.11.13",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "recharts": "^2.15.3"
