@@ -2,7 +2,7 @@ import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import "../../styles/charts.css";
 
-export default function MessageTypeStacked({ data }) {
+export default function MessageTypeStacked({ data, forceDesktop }) {
   if (!data || typeof data !== "object") return null;
 
   const labelMap = {
@@ -75,6 +75,8 @@ export default function MessageTypeStacked({ data }) {
     return grouped;
   };
 
+  const isMobile = forceDesktop ? false : window.innerWidth < 768;
+
   return (
     <div className="chart-card professional">
       <h3 className="chart-title">🧾 各類型訊息分布</h3>
@@ -82,11 +84,16 @@ export default function MessageTypeStacked({ data }) {
         {Object.entries(data).map(([sender, typeCounts]) => (
           <div key={sender}>
             <h4 className="pie-title">{sender}</h4>
-            <div style={{ height: 500 }}>
+            <div style={{ height: isMobile ? 240 : 500 }}>
               <ResponsivePie
                 data={convertToPieData(typeCounts)}
-                margin={{ top: 30, right: 40, bottom: 40, left: 40 }}
-                innerRadius={0.4}
+                margin={{
+                  top: 30,
+                  right: isMobile ? 0 : 40,
+                  left: isMobile ? 0 : 40,
+                  bottom: 40,
+                }}
+                innerRadius={isMobile ? 0.6 : 0.4}
                 padAngle={0}
                 cornerRadius={0}
                 colors={({ data }) => data.color}
@@ -109,8 +116,8 @@ export default function MessageTypeStacked({ data }) {
                 }}
                 arcLabelsSkipAngle={360}
                 arcLinkLabelsSkipAngle={0}
-                arcLinkLabelsDiagonalLength={20}
-                arcLinkLabelsStraightLength={60}
+                arcLinkLabelsDiagonalLength={isMobile ? 10 : 20}
+                arcLinkLabelsStraightLength={isMobile ? 20 : 60}
                 arcLinkLabelsTextOffset={10}
                 enableArcLabels={false}
                 animate={true}
@@ -180,7 +187,7 @@ export default function MessageTypeStacked({ data }) {
                   );
                 }}
                 theme={{
-                  text: { fill: "#ccc", fontSize: 16 },
+                  text: { fill: "#ccc", fontSize: isMobile ? 13 : 16 },
                 }}
               />
             </div>

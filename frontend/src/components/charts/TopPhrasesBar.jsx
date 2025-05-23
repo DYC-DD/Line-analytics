@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import "../../styles/charts.css";
 
-export default function TopPhrasesBar({ data }) {
+export default function TopPhrasesBar({ data, forceDesktop }) {
   if (!data || !Array.isArray(data)) return null;
 
   const chartData = data.map(([phrase, value]) => ({
@@ -23,6 +23,8 @@ export default function TopPhrasesBar({ data }) {
   const maxPhraseLength = Math.max(...chartData.map((d) => d.phrase.length));
   const leftMargin = Math.max(40, Math.min(maxPhraseLength * 10, 140));
 
+  const isMobile = forceDesktop ? false : window.innerWidth < 768;
+
   return (
     <div className="chart-card professional">
       <h3 className="chart-title">💬 常用語句 Top 10</h3>
@@ -30,7 +32,12 @@ export default function TopPhrasesBar({ data }) {
         <BarChart
           data={chartData}
           layout="vertical"
-          margin={{ top: 20, right: 30, left: leftMargin, bottom: 20 }}
+          margin={{
+            top: 10,
+            right: isMobile ? 20 : 30,
+            left: isMobile ? 0 : leftMargin,
+            bottom: isMobile ? 20 : 20,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
           <XAxis
@@ -70,7 +77,7 @@ export default function TopPhrasesBar({ data }) {
             <LabelList
               dataKey="value"
               position="right"
-              style={{ fill: "#eee", fontSize: 12, fontWeight: 500 }}
+              style={{ fill: "#eee", fontSize: 14, fontWeight: 500 }}
             />
           </Bar>
         </BarChart>
