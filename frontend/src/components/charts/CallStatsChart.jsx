@@ -30,7 +30,6 @@ const generateLineColors = (callRecords) => {
     });
   };
 
-  // 收集所有發起通話的使用者（只包含成功和取消）
   collect(callRecords.success);
   collect(callRecords.cancelled);
 
@@ -54,7 +53,6 @@ const generateHourlyCallData = (callRecords) => {
   const allKeys = new Set();
 
   const add = (timeStr, sender, type) => {
-    // API 傳回時間格式為 "HH:MM"
     const [hourStr] = timeStr.split(":");
     const hour = parseInt(hourStr, 10);
     const key = `${sender} ${type}`;
@@ -82,7 +80,7 @@ const generateHourlyCallData = (callRecords) => {
   });
 };
 
-export default function CallStatsChart({ data }) {
+export default function CallStatsChart({ data, forceDesktop }) {
   if (
     !data ||
     !data.call_duration_by_sender ||
@@ -97,7 +95,7 @@ export default function CallStatsChart({ data }) {
 
   const chartData = [
     {
-      name: "總通話時間",
+      name: "總通話",
       total: data.total_call_duration,
     },
     {
@@ -120,6 +118,59 @@ export default function CallStatsChart({ data }) {
   const totalInSeconds = data.total_call_duration;
   const colors = ["#42a5f5", "#66bb6a"];
 
+  const isMobile = forceDesktop ? false : window.innerWidth < 768;
+  const renderLegend = (props) => {
+    const { payload } = props;
+
+    const itemsPerRow = isMobile ? 2 : payload.length;
+    const rows = [];
+
+    for (let i = 0; i < payload.length; i += itemsPerRow) {
+      rows.push(payload.slice(i, i + itemsPerRow));
+    }
+
+    return (
+      <div style={{ marginTop: 12 }}>
+        {rows.map((row, rowIndex) => (
+          <div
+            key={`legend-row-${rowIndex}`}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+              marginBottom: 4,
+              flexWrap: "wrap",
+            }}
+          >
+            {row.map((entry) => (
+              <span
+                key={entry.value}
+                style={{
+                  color: entry.color,
+                  fontSize: isMobile ? "12px" : "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <svg width="10" height="10">
+                  <rect
+                    width="10"
+                    height="10"
+                    fill={entry.color}
+                    rx={2}
+                    ry={2}
+                  />
+                </svg>
+                {entry.value}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="chart-card professional">
       <h3 className="chart-title">📞 通話統計</h3>
@@ -127,13 +178,18 @@ export default function CallStatsChart({ data }) {
         <BarChart
           layout="vertical"
           data={chartData}
-          margin={{ top: 20, right: 40, left: 40, bottom: 20 }}
+          margin={{
+            top: 20,
+            right: isMobile ? 10 : 40,
+            left: isMobile ? 0 : 40,
+            bottom: 20,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
           <XAxis
             type="number"
             domain={[0, totalInSeconds]}
-            tick={{ fill: "#aaa", fontSize: 13 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v) => formatSeconds(v)}
@@ -143,7 +199,7 @@ export default function CallStatsChart({ data }) {
           <YAxis
             type="category"
             dataKey="name"
-            tick={{ fill: "#aaa", fontSize: 13 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
           />
@@ -197,7 +253,7 @@ export default function CallStatsChart({ data }) {
               dataKey="total"
               position="center"
               formatter={formatSeconds}
-              style={{ fill: "#fff", fontSize: 13 }}
+              style={{ fill: "#fff", fontSize: isMobile ? 12 : 14 }}
             />
           </Bar>
 
@@ -212,19 +268,23 @@ export default function CallStatsChart({ data }) {
               <LabelList
                 dataKey={sender}
                 position="center"
-                content={(props) => {
-                  const { x, y, width, height, value } = props;
+                content={({ x, y, width, height, value }) => {
                   if (!value) return null;
+
+                  const text = isMobile
+                    ? `${formatSeconds(value)}`
+                    : `${sender}：${formatSeconds(value)}`;
+
                   return (
                     <text
                       x={x + width / 2}
                       y={y + height / 2}
                       fill="#fff"
-                      fontSize={12}
+                      fontSize={isMobile ? 12 : 14}
                       textAnchor="middle"
                       dominantBaseline="middle"
                     >
-                      {`${sender}：${formatSeconds(value)}`}
+                      {text}
                     </text>
                   );
                 }}
@@ -235,24 +295,29 @@ export default function CallStatsChart({ data }) {
       </ResponsiveContainer>
 
       <h3 className="chart-title">📊 通話次數：成功 vs 取消</h3>
-      <ResponsiveContainer width="100%" height={160}>
+      <ResponsiveContainer width="100%" height={180}>
         <BarChart
           layout="vertical"
           data={countData}
-          margin={{ top: 20, right: 40, left: 40, bottom: 20 }}
+          margin={{
+            top: 20,
+            right: isMobile ? 8 : 40,
+            left: isMobile ? 0 : 40,
+            bottom: 20,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
           <XAxis
             type="number"
             allowDecimals={false}
-            tick={{ fill: "#aaa", fontSize: 13 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
             type="category"
             dataKey="name"
-            tick={{ fill: "#aaa", fontSize: 13 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
           />
@@ -291,7 +356,7 @@ export default function CallStatsChart({ data }) {
                     x={x + width / 2}
                     y={y + height / 2}
                     fill="#fff"
-                    fontSize={14}
+                    fontSize={isMobile ? 12 : 14}
                     textAnchor="middle"
                     dominantBaseline="middle"
                   >
@@ -312,7 +377,7 @@ export default function CallStatsChart({ data }) {
                     x={x + width / 2}
                     y={y + height / 2}
                     fill="#fff"
-                    fontSize={14}
+                    fontSize={isMobile ? 12 : 14}
                     textAnchor="middle"
                     dominantBaseline="middle"
                   >
@@ -329,7 +394,12 @@ export default function CallStatsChart({ data }) {
       <ResponsiveContainer width="100%" height={500}>
         <LineChart
           data={generateHourlyCallData(data.call_records)}
-          margin={{ top: 20, right: 40, left: 40, bottom: 20 }}
+          margin={{
+            top: 20,
+            right: isMobile ? 8 : 40,
+            left: isMobile ? 0 : 40,
+            bottom: 20,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
           <XAxis
@@ -353,7 +423,7 @@ export default function CallStatsChart({ data }) {
             }}
             labelFormatter={(label) => `${label}`}
           />
-          <Legend />
+          <Legend content={renderLegend} />
           {allKeys.map((key) => (
             <Line
               key={key}
