@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import "../../styles/charts.css";
 
-export default function DailyTrendLine({ data }) {
+export default function DailyTrendLine({ data, forceDesktop }) {
   if (!data) return null;
 
   const calendarData = Object.entries(data).map(([date, value]) => ({
@@ -44,49 +44,102 @@ export default function DailyTrendLine({ data }) {
     value,
   }));
 
+  const isMobile = forceDesktop ? false : window.innerWidth < 768;
+  const containerStyle = isMobile
+    ? { overflowX: "auto", overflowY: "hidden" }
+    : { height: `${chartHeight}px`, overflowY: "hidden" };
+
   return (
     <div className="chart-card professional">
       <h3 className="chart-title">🗓️ 每日訊息數量分布</h3>
-      <div style={{ height: `${chartHeight}px` }}>
-        <ResponsiveCalendar
-          data={calendarData}
-          from={from}
-          to={to}
-          emptyColor="#222"
-          colors={["#c8e6c9", "#81c784", "#4caf50", "#388e3c", "#1b5e20"]}
-          minValue={minValue}
-          maxValue={maxValue}
-          margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
-          yearSpacing={40}
-          monthBorderColor="#555"
-          dayBorderWidth={1}
-          dayBorderColor="#444"
-          tooltip={(datum) => (
-            <div
-              style={{
-                background: "#fff",
-                color: "#000",
-                padding: "6px 12px",
-                borderRadius: "999px",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {datum.day}：{datum.value?.toLocaleString() ?? "無訊息"}
+      <div style={containerStyle}>
+        {isMobile ? (
+          <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+            <div style={{ width: "1000px", height: `${chartHeight}px` }}>
+              <ResponsiveCalendar
+                data={calendarData}
+                from={from}
+                to={to}
+                emptyColor="#222"
+                colors={["#c8e6c9", "#81c784", "#4caf50", "#388e3c", "#1b5e20"]}
+                minValue={minValue}
+                maxValue={maxValue}
+                margin={{ top: 20, right: 10, bottom: 0, left: 10 }}
+                yearSpacing={40}
+                monthBorderColor="#555"
+                dayBorderWidth={1}
+                dayBorderColor="#444"
+                tooltip={(datum) => (
+                  <div
+                    style={{
+                      background: "#fff",
+                      color: "#000",
+                      padding: "6px 12px",
+                      borderRadius: "999px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {datum.day}：{datum.value?.toLocaleString() ?? "無訊息"}
+                  </div>
+                )}
+                theme={{
+                  text: {
+                    fill: "#666",
+                    fontSize: 13,
+                  },
+                  labels: {
+                    text: {
+                      fill: "#666",
+                      fontSize: 13,
+                    },
+                  },
+                }}
+              />
             </div>
-          )}
-          theme={{
-            text: {
-              fill: "#666",
-              fontSize: 13,
-            },
-            labels: {
-              text: {
-                fill: "#666",
-                fontSize: 13,
-              },
-            },
-          }}
-        />
+          </div>
+        ) : (
+          <div style={{ height: `${chartHeight}px` }}>
+            <ResponsiveCalendar
+              data={calendarData}
+              from={from}
+              to={to}
+              emptyColor="#222"
+              colors={["#c8e6c9", "#81c784", "#4caf50", "#388e3c", "#1b5e20"]}
+              minValue={minValue}
+              maxValue={maxValue}
+              margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
+              yearSpacing={40}
+              monthBorderColor="#555"
+              dayBorderWidth={1}
+              dayBorderColor="#444"
+              tooltip={(datum) => (
+                <div
+                  style={{
+                    background: "#fff",
+                    color: "#000",
+                    padding: "6px 12px",
+                    borderRadius: "999px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {datum.day}：{datum.value?.toLocaleString() ?? "無訊息"}
+                </div>
+              )}
+              theme={{
+                text: {
+                  fill: "#666",
+                  fontSize: 13,
+                },
+                labels: {
+                  text: {
+                    fill: "#666",
+                    fontSize: 13,
+                  },
+                },
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <h3 className="chart-title" style={{ marginTop: "3rem" }}>
@@ -94,18 +147,19 @@ export default function DailyTrendLine({ data }) {
       </h3>
       <div style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height={500}>
-          <AreaChart data={lineData}>
+          <AreaChart
+            data={lineData}
+            margin={{ top: 10, right: 20, bottom: 30, left: 0 }}
+          >
             <CartesianGrid stroke="#444" />
             <XAxis
               dataKey="date"
-              tick={{ fill: "#ccc" }}
-              fontSize={14}
+              tick={{ fill: "#ccc", fontSize: isMobile ? 12 : 14 }}
               interval="preserveStartEnd"
-              minTickGap={20}
+              minTickGap={isMobile ? 16 : 20}
             />
             <YAxis
-              tick={{ fill: "#ccc" }}
-              fontSize={14}
+              tick={{ fill: "#ccc", fontSize: isMobile ? 11 : 14 }}
               tickFormatter={(v) => (v === 0 ? "" : v)}
             />
             <Tooltip
@@ -135,7 +189,7 @@ export default function DailyTrendLine({ data }) {
               dataKey="date"
               height={20}
               stroke="#8884d8"
-              travellerWidth={8}
+              travellerWidth={isMobile ? 6 : 8}
               fill="#2c2c2c"
               handleStyle={{
                 fill: "#e1bee7",
@@ -143,7 +197,7 @@ export default function DailyTrendLine({ data }) {
               }}
               textStyle={{
                 fill: "#ccc",
-                fontSize: 12,
+                fontSize: isMobile ? 10 : 12,
               }}
             />
           </AreaChart>

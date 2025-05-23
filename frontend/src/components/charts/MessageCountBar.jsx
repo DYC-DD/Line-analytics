@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import "../../styles/charts.css";
 
-export default function MessageCountBar({ data }) {
+export default function MessageCountBar({ data, forceDesktop }) {
   if (!data) return null;
 
   const total = Object.values(data).reduce((sum, count) => sum + count, 0);
@@ -27,6 +27,8 @@ export default function MessageCountBar({ data }) {
     { name: "總計", value: total },
   ];
 
+  const isMobile = forceDesktop ? false : window.innerWidth < 768;
+
   return (
     <div className="chart-card professional">
       <h3 className="chart-title">📊 傳送者訊息統計</h3>
@@ -38,13 +40,13 @@ export default function MessageCountBar({ data }) {
           <CartesianGrid strokeDasharray="4 4" stroke="#444" />
           <XAxis
             dataKey="name"
-            tick={{ fill: "#aaa", fontSize: 14 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
             allowDecimals={false}
-            tick={{ fill: "#aaa", fontSize: 14 }}
+            tick={{ fill: "#aaa", fontSize: isMobile ? 12 : 14 }}
             axisLine={false}
             tickLine={false}
           />
@@ -71,7 +73,11 @@ export default function MessageCountBar({ data }) {
             <LabelList
               dataKey="value"
               position="top"
-              style={{ fill: "#eee", fontWeight: 600, fontSize: 16 }}
+              style={{
+                fill: "#eee",
+                fontWeight: 600,
+                fontSize: isMobile ? 14 : 16,
+              }}
             />
           </Bar>
         </BarChart>
