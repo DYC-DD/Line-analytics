@@ -21,7 +21,7 @@ export default function Upload({ onUploadSuccess, setLoading }) {
     setError(null);
     try {
       const result = await uploadChatFile(file);
-      onUploadSuccess(result.analysis);
+      onUploadSuccess(result.analysis, file.name);
     } catch (err) {
       setError(err.message);
       setLoading(false);

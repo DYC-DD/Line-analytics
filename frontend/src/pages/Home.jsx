@@ -3,14 +3,17 @@ import Upload from "../components/Upload";
 import Loader from "../components/Loader";
 import phoneIcon from "../assets/mobile-phone.png";
 import ChartPanel from "./ChartPanel";
+import TutorialPanel from "../components/TutorialPanel";
 import "../styles/Home.css";
 
 export default function Home() {
   const [analysis, setAnalysis] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleUploadSuccess = (data) => {
+  const handleUploadSuccess = (data, uploadedFileName) => {
     setAnalysis(data);
+    setFileName(uploadedFileName);
     setLoading(false);
   };
 
@@ -31,12 +34,18 @@ export default function Home() {
         </div>
       )}
 
+      {!loading && !analysis && (
+        <div className="tutorial-container">
+          <TutorialPanel />
+        </div>
+      )}
+
       {analysis && !loading && (
         <>
-          <ChartPanel analysis={analysis} />
-          <pre style={{ marginTop: "2rem", textAlign: "left" }}>
-            {/* <code>{JSON.stringify(analysis, null, 2)}</code> */}
-          </pre>
+          <ChartPanel analysis={analysis} fileName={fileName} />
+          {/* <pre style={{ marginTop: "2rem" }}>
+            <code>{JSON.stringify(analysis, null, 2)}</code>
+          </pre> */}
         </>
       )}
     </div>
