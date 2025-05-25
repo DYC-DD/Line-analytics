@@ -43,9 +43,6 @@ export default function Home() {
       {analysis && !loading && (
         <>
           <ChartPanel analysis={analysis} fileName={fileName} />
-          {/* <pre style={{ marginTop: "2rem" }}>
-            <code>{JSON.stringify(analysis, null, 2)}</code>
-          </pre> */}
         </>
       )}
     </div>

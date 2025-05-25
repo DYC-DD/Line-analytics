@@ -1,16 +1,14 @@
+import { parseLineChat } from "../../utils/parser";
+import { analyzeChat } from "../../utils/analyzer";
+
 export async function uploadChatFile(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response = await fetch("http://localhost:8000/upload", {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || "上傳失敗");
+  if (!file.name.endsWith(".txt")) {
+    throw new Error("請選擇 .txt 聊天記錄檔案");
   }
 
-  return await response.json();
+  const text = await file.text();
+  const parsedMessages = parseLineChat(text);
+  const analysis = analyzeChat(parsedMessages);
+
+  return { analysis };
 }

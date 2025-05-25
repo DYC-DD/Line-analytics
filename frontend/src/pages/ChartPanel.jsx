@@ -56,12 +56,15 @@ export default function ChartPanel({ analysis, fileName }) {
     const baseName = fileName ? fileName.replace(/\.[^/.]+$/, "") : "analysis";
     const outputName = `${baseName}分析.png`;
 
+    const isMobile = window.innerWidth < 768;
+    const pixelRatio = isMobile ? 6 : 2;
+
     toPng(clone, {
       cacheBust: true,
       backgroundColor: "#1e1e1e",
       width,
       height,
-      pixelRatio: 2,
+      pixelRatio,
     })
       .then((dataUrl) => download(dataUrl, outputName))
       .catch((err) => console.error("圖片下載失敗：", err))
