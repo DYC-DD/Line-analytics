@@ -38,51 +38,6 @@
   padding: 1rem;
 }
 
-.download-button-container {
-  display: flex;
-  justify-content: center;
-}
-
-.download-button {
-  background-color: #42a4f5;
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.6rem 1.4rem;
-  border: none;
-  border-radius: 999px;
-  opacity: 0.25;
-  transition: all 0.3s ease;
-  pointer-events: auto;
-}
-
-.download-button:hover {
-  opacity: 0.8;
-  cursor: pointer;
-  background-color: #2196f3;
-}
-
-.download-loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.download-loader-overlay .hourglassBackground {
-  margin: 0 auto !important;
-  margin-bottom: 0 !important;
-}
-
-.chart-panel-wrapper.desktop-mode .chart-title {
-  font-size: 1.8rem !important;
-}
-
 @media (max-width: 768px) {
   .chart-card.professional {
     padding: 0.5rem 0rem 0rem 0rem;
