@@ -20,7 +20,7 @@
 
 <div align="center">
     <h3>聊天記錄分析 Demo</h3>
-        <img src="./frontend/src/assets/demo.jpg" width="500"/>
+        <img src="./frontend/src/assets/demo.jpeg" width="500"/>
 </div>
 
 ## 資安聲明
